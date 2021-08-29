@@ -34,7 +34,7 @@ from json import dumps
 
 tokensiz_hes_sinifi = HesKodu(telefon_numarasi = 5451112233)
 
-giris = hes_sinifi.sms_gonder
+giris = tokensiz_hes_sinifi.sms_gonder
 
 if giris:
     veri = hes_sinifi.giris_dogrula(int(input("Lütfen SMS Kodunu Giriniz : ")))
