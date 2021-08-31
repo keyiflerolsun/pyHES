@@ -10,7 +10,7 @@ setup(
     packages     = ["pyHES"],
 
     name         = "pyHES",
-    version      = "0.1.0",
+    version      = "0.1.1",
     url          = "https://github.com/keyiflerolsun/pyHES",
     description  = "⚕ (pyHES), Python ile Hayat Eve Sığar ile ilgili işlemleri yapan bir kütüphane.",
     keywords     = ["pyHES", "KekikAkademi", "keyiflerolsun"],

@@ -19,6 +19,9 @@ class HES(object):
         .hes_sorgula(hes_kodu:str):
             A1B23456 Şeklinde Hes Kodu Sorgulaması Yapılır. - id_token ile birlikte kullanılır!
     """
+
+    tarih_cevir = lambda tarih: datetime.datetime.strptime(tarih.split('T')[0],"%Y-%m-%d").strftime("%d-%m-%Y")
+
     def __repr__(self) -> str:
         return f"{__class__.__name__} Sınıfı -- {self.saglik_gov} ile haberleşmek için yazılmıştır.."
 
@@ -60,7 +63,6 @@ class HES(object):
             return False
 
         veri  = istek.json()
-        dogum = datetime.datetime.strptime(veri['dob'],"%Y-%m-%d")
         return {
             # "kimlik_hash"   : veri['identityNumberHash'],
             # "id"            : veri['userId'],
@@ -70,7 +72,7 @@ class HES(object):
             "ad"            : veri['firstname'].title(),
             "soyad"         : veri['lastname'].title(),
             "cinsiyet"      : "Erkek" if veri['gender'] == "MALE" else "Kadın",
-            "dogum_tarihi"  : dogum.strftime("%d-%m-%Y"),
+            "dogum_tarihi"  : HES.tarih_cevir(veri['dob']),
             "durum"         : "Risksiz" if veri['healthStatus'] == "RISKLESS" else "Riskli"
         }
 
@@ -93,9 +95,9 @@ class HES(object):
             {
                 "hes_kodu"   : veri['hes_code'],
                 "aciklama"   : veri['description'],
-                "olusturma"  : datetime.datetime.strptime(veri['created_date'],"%Y-%m-%dT%H:%M:%S.%fZ").strftime("%d-%m-%Y"),
+                "olusturma"  : HES.tarih_cevir(veri['created_date']),
                 "olusturan"  : veri['created_by'].upper(),
-                "gecerlilik" : datetime.datetime.strptime(veri['expiration_date'],"%Y-%m-%dT%H:%M:%SZ").strftime("%d-%m-%Y")
+                "gecerlilik" : HES.tarih_cevir(veri['expiration_date'])
             }
               for veri in veriler
         ]
@@ -115,7 +117,6 @@ class HES(object):
             return False
 
         veri  = istek.json()
-        dogum = datetime.datetime.strptime(veri['dob'],"%Y-%m-%d")
         return {
             # "kimlik_hash"   : veri['identityNumberHash'],
             # "id"            : veri['userId'],
@@ -125,7 +126,7 @@ class HES(object):
             "ad"            : veri['firstname'].title(),
             "soyad"         : veri['lastname'].title(),
             "cinsiyet"      : "Erkek" if veri['gender'] == "MALE" else "Kadın",
-            "dogum_tarihi"  : dogum.strftime("%d-%m-%Y"),
+            "dogum_tarihi"  : HES.tarih_cevir(veri['dob']),
             "durum"         : "Risksiz" if veri['healthStatus'] == "RISKLESS" else "Riskli",
             "hes_kodlarim"  : self.hes_kodlarim()
         }
@@ -151,12 +152,11 @@ class HES(object):
             return False
 
         veri  = istek.json()
-        tarih = datetime.datetime.strptime(veri['expiration_date'],"%Y-%m-%dT%H:%M:%SZ")
         return {
             "hes_kodu"      : hes_kodu,
             "tc_kimlik_no"  : veri['masked_identity_number'],
             "ad"            : veri['masked_firstname'],
             "soyad"         : veri['masked_lastname'],
             "durum"         : "Risksiz" if veri['current_health_status'] == "RISKLESS" else "Riskli",
-            "gecerlilik"    : tarih.strftime("%d-%m-%Y"), # "2021-12-31T00:00:00Z",
+            "gecerlilik"    : HES.tarih_cevir(veri['expiration_date'])
         }
