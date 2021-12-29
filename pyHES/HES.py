@@ -139,7 +139,7 @@ class HES(object):
 
         hes = hes_kodu.replace('-', '').replace(' ', '')
 
-        endpoint = "/services/hescodeproxy/api/check-hes-code"
+        endpoint = "/services/hescodeproxy/api/check-hes-code-plus"
         istek = post(
             f"{self.saglik_gov}{endpoint}",
             headers = self.yetki,
@@ -153,10 +153,15 @@ class HES(object):
 
         veri  = istek.json()
         return {
-            "hes_kodu"      : hes_kodu,
-            "tc_kimlik_no"  : veri['masked_identity_number'],
-            "ad"            : veri['masked_firstname'],
-            "soyad"         : veri['masked_lastname'],
-            "durum"         : "Risksiz" if veri['current_health_status'] == "RISKLESS" else "Riskli",
-            "gecerlilik"    : HES.tarih_cevir(veri['expiration_date'])
+            "hes_kodu"       : hes_kodu,
+            "tc_kimlik_no"   : veri['masked_identity_number'],
+            "ad"             : veri['masked_firstname'],
+            "soyad"          : veri['masked_lastname'],
+            "durum"          : "Risksiz" if veri['current_health_status'] == "RISKLESS" else "Riskli",
+            "asi"            : veri['is_vaccinated'],
+            "bagisiklik"     : veri['is_immune'],
+            "test"           : veri['is_tested'],
+            "uygunluk"       : veri['is_eligible'],
+            "uygunluk_metin" : veri['eligible_text'],
+            "gecerlilik"     : HES.tarih_cevir(veri['expiration_date'])
         }
