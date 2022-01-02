@@ -3,6 +3,8 @@
 from requests import get, post
 from requests.structures import CaseInsensitiveDict
 import datetime
+from pyzbar import pyzbar
+from PIL import Image
 
 class HES(object):
     """
@@ -99,7 +101,7 @@ class HES(object):
                 "olusturan"  : veri['created_by'].upper(),
                 "gecerlilik" : HES.tarih_cevir(veri['expiration_date'])
             }
-              for veri in veriler
+            for veri in veriler
         ]
 
     def bilgilerim(self):
@@ -165,3 +167,7 @@ class HES(object):
             "uygunluk_metin" : veri['eligible_text'],
             "gecerlilik"     : HES.tarih_cevir(veri['expiration_date'])
         }
+    
+    def qr_sorgula(self, image_path:str):
+        qr = pyzbar.decode(Image.open(image_path))
+        return self.hes_sorgula(qr[0].data.decode("utf8").split("|")[-1])

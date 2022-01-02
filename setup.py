@@ -10,7 +10,7 @@ setup(
     packages     = ["pyHES"],
 
     name         = "pyHES",
-    version      = "0.1.2",
+    version      = "0.1.3",
     url          = "https://github.com/keyiflerolsun/pyHES",
     description  = "⚕ (pyHES), Python ile Hayat Eve Sığar ile ilgili işlemleri yapan bir kütüphane.",
     keywords     = ["pyHES", "KekikAkademi", "keyiflerolsun"],
@@ -28,6 +28,7 @@ setup(
 
     python_requires     = '>=3.9',
     install_requires    = [
-        "requests"
+        "requests",
+        "pyzbar"
     ]
 )
